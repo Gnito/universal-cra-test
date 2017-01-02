@@ -1,6 +1,7 @@
 const fs = require('fs');
 const webpack = require('webpack');
 const url = require('url');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const paths = require('./paths');
 const clientProdConfig = require('./webpack.config.prod.js');
 const getClientEnvironment = require('./env');
@@ -61,12 +62,19 @@ module.exports = Object.assign({}, clientProdConfig, {
         include: paths.appSrc,
         loader: 'babel',
       },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss')
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
     ]
   },
   plugins: [
     new webpack.DefinePlugin(env),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
+    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
+    new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
   ],
   externals: nodeModules
 });

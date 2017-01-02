@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, Redirect, BrowserRouter, Match, Miss } from 'react-router';
+import css from './App.css';
 
 const ITEMS = ['a', 'b', 'c'];
 
 function NotFound() {
   return (
     <div>
-      <p>Page not found.</p>
+      <p>Page not found. </p>
       <Link to="/">back to home</Link>
     </div>
   );
@@ -43,6 +44,7 @@ function Index(props) {
   return (
     <div>
       <p>Home page</p>
+      <p className={css.blaa}>{css.blaa}</p>
       <ul>
         {ITEMS.map(itemLink)}
         {itemLink('notfound')}
@@ -53,13 +55,19 @@ function Index(props) {
 
 function App() {
   return (
+    <div>
+      <Match exactly pattern="/" component={Index} />
+      <Match exactly pattern="/home" component={OldIndex} />
+      <Match pattern="/items/:id" component={Item} />
+      <Miss component={NotFound}/>
+    </div>
+  );
+}
+
+export function AppClient() {
+  return (
     <BrowserRouter>
-      <div>
-        <Match exactly pattern="/" component={Index} />
-        <Match exactly pattern="/home" component={OldIndex} />
-        <Match pattern="/items/:id" component={Item} />
-        <Miss component={NotFound}/>
-      </div>
+      <App />
     </BrowserRouter>
   );
 }
