@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "nodemon": "^1.11.0",
     "autoprefixer": "6.5.1",
     "babel-core": "6.17.0",
     "babel-eslint": "7.1.1",
@@ -54,10 +53,13 @@
     "react-router": "4.0.0-alpha.6"
   },
   "scripts": {
+    "clean": "rm -rf build/*",
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build-client": "node scripts/build.js",
+    "build-server": "NODE_ENV=production webpack --config config/webpack.server.prod.js",
+    "build": "yarn run build-client&&yarn run build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "server": "yarn run build&&nodemon --watch server server/index.js"
+    "server": "yarn run clean&&yarn run build&&node server/index.js"
   },
   "jest": {
     "collectCoverageFrom": [
